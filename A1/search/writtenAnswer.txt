@@ -1,0 +1,50 @@
+
+Short Answer Questions
+
+(1) Assume Pacman is in an NxN maze with no interior walls.
+
+(1a) What is the branching factor of the successor function (i.e., the maximum number of states produced by the successor function) if Pacman is in the corner? Explain your answer. (1 point total)
+	 Answer: If Pacman is in a corner, the branching factor of the successor function would be two. A permissible move in Pacman would be in the horizontal or vertical direction. Pacman cannot move diagonally. Assuming Pacman is in the top right corner of a maze, it could either mover South by one node or to the West (left) by one node. A move North or to the East would not be permissible since those nodes are not within the maze. Therfore, the branching factor would be two.
+
+(1b) What is the branching factor of the successor function if Pacman is in the middle? Explain your answer. (1 point total)
+	 Answer: If Pacman is in the middle, the branching factor is 4. Pacman can move North, South, East or West. All the moves are in the four directions are permissible since all the nodes are within the maze space area.
+
+(1c) What is the maximum possible depth of the search space? Explain your answer. (1 point total)
+	 Answer: N*N. The nodes are all connected to each other and so you can traverse the entire graph using depth first search
+
+
+(2) You’ve been asked to analyze space requirements for Pacman’s OPEN list when using A* with a monotone heuristic and starting from a fixed location. Your game has been engineered such that transitions all have non-zero positive costs, c, such that cmin ? c ? cmax. Assume there is no cycle checking. 
+Let ctotal represent the optimal cost solution and assume the maximum number of states produced by the successor function is 4. Each node in the search space is comprised of the current state as well as the path taken to get to that state. As such each node on the OPEN list corresponds to a different path that is being explored.
+
+(2a) Define the maximum number of paths on the OPEN list, n, at the time the solution is found. Your answer should be in terms of the parameters defined above. Explain your answer. (4 points total)
+	Answer: n = 4^ (ctotal/cmin + 1)
+The number 4 represents the maximum branching factor.  ctotal represents the cost of your optimal solution and dividing by cmin would give you the maximum number of actions required to traverse the path. The growth would be exponential because we are using an A* algorithm. This builds off of a breadth first search algorithm which would give you a similar spcae complexity for storing nodes. In the end, one node is popped off before it checks if it has reached the goal state and returns a set of actions. 
+
+(2b) Conversely, if you only had space for n paths on the OPEN list, what is the bound on the total cost of the solution that you can guarantee you will find? Again, your answer should be in terms of the parameters defined above. Explain your answer. (4 points total)
+	Answer: ctotal <= cmax(log n - 1) //log has base 4
+Similar to the answer in part a, the total cost of the path is related to the number of nodes that can be stored and the branching factor. logn- 1 (with base 4) will five you the number of actions required to reach a solution. If all these actions are of cost cmax, then the upper bound for the total cost is the product of the two. Similarly, if cmin is the cost of each action in the path, then cmin(log n - 1) is the lower bound for ctotal. 
+
+
+(3) 
+(3a) f(n) = g(n) +h(n) (1 point total)
+	Answer: Yes, the evaluation function will yield an optimal solution.
+
+(3b) f(n) = g(n) +3*h(n) (1 point total)
+	Answer: No, the function will not yield an optimal solution because heuristics are variable and multiplying by a constant will not always lead to the optimal solution.
+	Ratio = (Cost of returned Soltuion)/(Cost of Optimal Solution)
+          =  (g(n)+3*h(n))/(g(n)+h(n))
+          <=  (3*g(n)+3*h(n))/(g(n)+h(n))
+           =  3(g(n)+h(n))/(g(n)+h(n))
+           = 3
+	Therefore, the upper bound for the ratio is 3.
+
+(3c) f(n) = 3* g(n) +h(n) (1 point total)
+	Answer: Yes, the evaluation function will lead to an optimal solution. Multiplying cost by a constant will scale up all the costs but still result in the same optimal solution as part a.
+
+
+4)Consider two monotone heuristics h1 and h2. h1 dominates h2, but h1 takes much longer to compute
+than h2.
+(4a) Describe a situation in which you would recommend that Pacman use h1. (3 points total)
+ 	Answer: Pacman could use h1 when finding food. Food will permanently stay in its given node until Pacman eats it. Thus, you could take your time computing the best way to get to it.
+(4b) Describe a situation in which you would recommend that Pacman use h2. (3 points total)
+	Answer: Pacman could use h2 to avoid ghosts. The ghosts are continuously moving and so you would need to regularly computer their position in order to avoid them. In this case, having a cheaper heuristic would allow Pacman to get away faster.
